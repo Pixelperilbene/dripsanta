@@ -2,80 +2,471 @@
 <html lang="it">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Catalogo Drip Santa</title>
-  <link rel="stylesheet" href="style.css" />
-
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="theme-color" content="#FF3D00" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="Drip Santa" />
+  <meta name="description" content="Il tuo posto per lo streetwear 🔥" />
+  <link rel="manifest" href="manifest.json" />
+  <title>Drip Santa 🔥</title>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet" />
   <style>
-    .home {
-      background: url('sfondo.jpg');
-      background-size: cover;
-      background-position: center;
-      animation: moveBackground 20s linear infinite;
+    :root {
+      --red:#FF3D00; --yellow:#FFD600; --bg:#080808;
+      --surface:#111; --border:#1e1e1e; --text:#f0f0f0; --muted:#555;
+      --font-display:'Bebas Neue',sans-serif; --font-body:'DM Mono',monospace;
     }
+    *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+    html,body{background:var(--bg);color:var(--text);font-family:var(--font-body);min-height:100vh;overflow-x:hidden;}
 
-    @keyframes moveBackground {
-      0% { background-position: 0 0; }
-      50% { background-position: 0 50px; }
-      100% { background-position: 0 0; }
-    }
+    header{position:sticky;top:0;z-index:100;background:rgba(8,8,8,0.96);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);padding:14px 20px;display:flex;align-items:center;justify-content:space-between;}
+    .logo{font-family:var(--font-display);font-size:36px;letter-spacing:3px;color:var(--text);cursor:pointer;}
+    .logo span{color:var(--red);}
+    .header-ig{display:flex;align-items:center;gap:6px;background:var(--red);color:#fff;text-decoration:none;font-size:11px;letter-spacing:1.5px;padding:8px 14px;text-transform:uppercase;}
+
+    .ticker-wrap{overflow:hidden;background:var(--red);padding:8px 0;}
+    .ticker{display:flex;gap:40px;white-space:nowrap;animation:ticker 20s linear infinite;}
+    .ticker span{font-family:var(--font-display);font-size:13px;letter-spacing:3px;color:#fff;}
+    @keyframes ticker{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+
+    .page{display:none;animation:fadeIn .25s ease;}
+    .page.active{display:block;}
+    @keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+
+    #install-banner{display:none;margin:0 16px 8px;background:var(--surface);border:1px solid var(--yellow);padding:14px 16px;align-items:center;gap:12px;}
+    #install-banner.show{display:flex;}
+    #install-banner p{font-size:12px;color:var(--text);flex:1;line-height:1.5;}
+    #install-banner p strong{color:var(--yellow);}
+    #install-btn{background:var(--yellow);color:#000;border:none;font-family:var(--font-body);font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;padding:10px 16px;cursor:pointer;white-space:nowrap;}
+    #dismiss-btn{background:none;border:none;color:var(--muted);font-size:18px;cursor:pointer;padding:4px;}
+
+    .hero{position:relative;padding:48px 20px 40px;overflow:hidden;}
+    .hero-bg{position:absolute;inset:0;background:radial-gradient(ellipse 60% 50% at 80% 50%,rgba(255,61,0,.12) 0%,transparent 70%),radial-gradient(ellipse 40% 40% at 20% 80%,rgba(255,214,0,.06) 0%,transparent 60%);}
+    .hero-tag{display:inline-block;background:var(--red);color:#fff;font-size:10px;letter-spacing:3px;padding:4px 12px;text-transform:uppercase;margin-bottom:16px;position:relative;}
+    .hero h1{font-family:var(--font-display);font-size:clamp(52px,14vw,90px);line-height:.9;letter-spacing:2px;position:relative;}
+    .hero h1 em{color:var(--red);font-style:normal;}
+    .hero-sub{margin-top:16px;color:var(--muted);font-size:12px;letter-spacing:1px;position:relative;}
+    .hero-cta{margin-top:28px;display:flex;gap:12px;flex-wrap:wrap;position:relative;}
+    .hero-main{display:flex;align-items:center;justify-content:space-between;gap:12px;position:relative;}
+    .hero-text{flex:1;min-width:0;}
+    .hero-logo{flex-shrink:0;width:140px;display:flex;align-items:center;justify-content:center;}
+    .hero-logo img{width:140px;height:auto;filter:drop-shadow(0 0 16px rgba(255,61,0,0.5));}
+    .btn-primary{background:var(--red);color:#fff;border:none;font-family:var(--font-body);font-size:12px;font-weight:500;letter-spacing:2px;text-transform:uppercase;padding:14px 28px;cursor:pointer;transition:transform .15s;}
+    .btn-primary:active{transform:scale(.97);}
+    .btn-secondary{background:transparent;color:var(--text);border:1px solid var(--border);font-family:var(--font-body);font-size:12px;letter-spacing:2px;text-transform:uppercase;padding:14px 28px;cursor:pointer;}
+
+    .section-header{padding:28px 20px 14px;display:flex;align-items:baseline;justify-content:space-between;}
+    .section-title{font-family:var(--font-display);font-size:30px;letter-spacing:2px;}
+    .section-title span{color:var(--red);}
+    .section-link{font-size:10px;letter-spacing:2px;color:var(--muted);cursor:pointer;text-transform:uppercase;background:none;border:none;border-bottom:1px solid var(--border);padding-bottom:2px;font-family:var(--font-body);}
+
+    /* SUB TITLE per categorie interne (es. Serie A, Premier League) */
+    .sub-title{font-family:var(--font-display);font-size:20px;letter-spacing:2px;color:var(--yellow);padding:20px 16px 8px;border-top:1px solid var(--border);margin-top:8px;}
+
+    .categories{padding:0 16px;display:grid;grid-template-columns:repeat(2,1fr);gap:10px;}
+    .cat-card{background:var(--surface);border:1px solid var(--border);padding:20px 16px;cursor:pointer;color:var(--text);display:flex;flex-direction:column;gap:8px;transition:border-color .2s,transform .15s;}
+    .cat-card:active{transform:scale(.98);border-color:var(--red);}
+    .cat-card.featured{grid-column:span 2;flex-direction:row;align-items:center;padding:24px 20px;border-color:var(--red);background:linear-gradient(135deg,#1a0800,#111);}
+    .cat-emoji{font-size:28px;}
+    .cat-card.featured .cat-emoji{font-size:40px;}
+    .cat-name{font-family:var(--font-display);font-size:22px;letter-spacing:2px;}
+    .cat-card.featured .cat-name{font-size:30px;}
+    .cat-tag{font-size:9px;letter-spacing:2px;color:var(--muted);text-transform:uppercase;}
+    .cat-card.featured .cat-tag{color:var(--red);}
+    .cat-arrow{margin-left:auto;font-size:24px;color:var(--red);}
+
+    /* PRODUCT GRID */
+    .product-grid{padding:0 16px;display:grid;grid-template-columns:repeat(2,1fr);gap:10px;}
+    .product-card{background:var(--surface);border:1px solid var(--border);overflow:hidden;transition:border-color .2s,transform .15s;}
+    .product-card:active{transform:scale(.98);border-color:var(--red);}
+    .product-img{aspect-ratio:1;background:#161616;display:flex;align-items:center;justify-content:center;font-size:48px;position:relative;overflow:hidden;}
+    .product-img img{width:100%;height:100%;object-fit:cover;position:absolute;inset:0;}
+    .product-badge{position:absolute;top:8px;left:8px;background:var(--red);color:#fff;font-size:8px;letter-spacing:2px;padding:3px 8px;text-transform:uppercase;z-index:1;}
+    .product-badge.yellow{background:var(--yellow);color:#000;}
+    .product-info{padding:12px;}
+    .product-brand{font-size:9px;letter-spacing:2px;color:var(--muted);text-transform:uppercase;margin-bottom:4px;}
+    .product-name{font-family:var(--font-display);font-size:16px;letter-spacing:1px;margin-bottom:6px;line-height:1.1;}
+    .product-price{font-size:13px;color:var(--yellow);margin-bottom:2px;}
+    .product-price2{font-size:11px;color:#aaa;}
+    .product-dm{display:block;margin:10px 12px 12px;text-align:center;background:var(--red);color:#fff;text-decoration:none;font-size:10px;letter-spacing:2px;text-transform:uppercase;padding:10px;}
+
+    .page-hero{padding:32px 20px 24px;border-bottom:1px solid var(--border);background:linear-gradient(180deg,#110500 0%,var(--bg) 100%);}
+    .page-hero-tag{font-size:10px;letter-spacing:3px;color:var(--red);text-transform:uppercase;margin-bottom:8px;}
+    .page-hero h2{font-family:var(--font-display);font-size:clamp(40px,10vw,64px);letter-spacing:2px;line-height:1;}
+    .page-hero p{color:var(--muted);font-size:12px;margin-top:8px;letter-spacing:1px;}
+
+    .ig-strip{margin:28px 16px;background:linear-gradient(135deg,#1a0d00,#0d0d1a);border:1px solid var(--border);padding:24px 20px;display:flex;flex-direction:column;gap:16px;}
+    .ig-strip-top{display:flex;align-items:center;gap:12px;}
+    .ig-icon{font-size:28px;}
+    .ig-text h3{font-family:var(--font-display);font-size:24px;letter-spacing:2px;}
+    .ig-text p{font-size:11px;color:var(--muted);letter-spacing:1px;}
+    .ig-link{display:block;text-align:center;background:linear-gradient(135deg,#f09433,#e6683c,#dc2743,#cc2366,#bc1888);color:#fff;text-decoration:none;font-size:12px;letter-spacing:2px;text-transform:uppercase;padding:14px;}
+
+    .reviews-scroll{padding:0 16px;display:flex;gap:12px;overflow-x:auto;scrollbar-width:none;-webkit-overflow-scrolling:touch;padding-bottom:4px;}
+    .reviews-scroll::-webkit-scrollbar{display:none;}
+    .review-card{background:var(--surface);border:1px solid var(--border);padding:16px;min-width:220px;flex-shrink:0;}
+    .review-stars{color:var(--yellow);font-size:13px;margin-bottom:8px;}
+    .review-text{font-size:12px;color:#aaa;line-height:1.6;margin-bottom:10px;}
+    .review-author{font-size:10px;letter-spacing:2px;color:var(--muted);text-transform:uppercase;}
+
+    .reviews-grid{padding:0 16px;display:flex;flex-direction:column;gap:12px;}
+    .review-card-full{background:var(--surface);border:1px solid var(--border);padding:20px;}
+    .review-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;}
+    .review-verified{font-size:10px;color:var(--muted);letter-spacing:2px;}
+    .review-card-full .review-text{font-size:13px;}
+
+    .info-section{padding:0 16px;margin-bottom:24px;}
+    .info-block{background:var(--surface);border:1px solid var(--border);padding:20px;margin-bottom:10px;}
+    .info-block h4{font-family:var(--font-display);font-size:20px;letter-spacing:2px;margin-bottom:8px;}
+    .info-block p{font-size:12px;color:#aaa;line-height:1.7;}
+    .info-block a{color:var(--red);text-decoration:none;}
+
+    .back-btn{display:flex;align-items:center;gap:8px;background:none;border:none;color:var(--muted);font-family:var(--font-body);font-size:11px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;padding:16px 20px 0;}
+    .back-btn:active{color:var(--red);}
+
+    .bottom-nav{position:fixed;bottom:0;left:0;right:0;background:rgba(8,8,8,0.97);backdrop-filter:blur(16px);border-top:1px solid var(--border);display:flex;padding-bottom:env(safe-area-inset-bottom);z-index:100;}
+    .nav-item{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;padding:10px 4px;cursor:pointer;color:var(--muted);font-size:9px;letter-spacing:1.5px;text-transform:uppercase;background:none;border:none;font-family:var(--font-body);transition:color .2s;}
+    .nav-item.active{color:var(--red);}
+    .nav-icon{font-size:20px;}
+    .bottom-spacer{height:80px;}
   </style>
 </head>
+<body>
 
-<body class="home">
+<header>
+  <div class="logo" onclick="showPage('home')"><span>DRIP</span> SANTA</div>
+  <a class="header-ig" href="https://www.instagram.com/drip__santa/" target="_blank">📸 IG</a>
+</header>
 
-  <header>
-    <div class="logo-container-left">
-      <img src="logodripsanta.jpg" alt="Drip Santa Logo">
-    </div>
-
-    <h1 class="hero-title-big">IL TUO POSTO PER LO STREETWEAR 🔥</h1>
-
-    <nav>
-      <a href="scarpe.html">SCARPE</a>
-      <a href="vestiti.html">VESTITI</a>
-      <a href="accessori.html">ACCESSORI</a>
-      <a href="calcio.html">CALCIO</a>
-      <a href="borse.html">BORSE</a>
-      <a href="elettronica.html">ELETTRONICA</a>
-      <a href="recensioni.html">RECENSIONI</a>
-    </nav>
-  </header>
-
-  <section class="hero-drip">
-    <img src="hero-drip.jpg" alt="Drip Santa Hero">
-
-    <div class="callout callout-pants">
-      <span>Nike x Stussy</span>
-    </div>
-
-    <div class="callout callout-shoes">
-      <span>Dunk Low</span>
-    </div>
-  </section>
-
-  <section class="preview-container">
-    <div class="preview-track">
-      <div class="preview-item">👟 Shoes</div>
-      <div class="preview-item">👕 Hoodies</div>
-      <div class="preview-item">👖 Jeans</div>
-      <div class="preview-item">🎧 Airpods</div>
-    </div>
-  </section>
-
-  <footer>
-  <div class="insta-center">
-    <a href="https://www.instagram.com/drip__santa/" class="glow-button" target="_blank">
-      <svg class="mini-insta" viewBox="0 0 24 24">
-        <path d="M7 2C4.24 2 2 4.24 2 7v10c0 2.76 2.24 5 5 5h10c2.76 0 5-2.24 5-5V7c0-2.76-2.24-5-5-5H7zm10 2c1.66 0 3 1.34 3 3v10c0 
-        1.66-1.34 3-3 3H7c-1.66 0-3-1.34-3-3V7c0-1.66 1.34-3 3-3h10zm-5 3a5 5 0 100 10 5 5 0 000-10zm6.5-.75a1.25 1.25 0 11-2.5 
-        0 1.25 1.25 0 012.5 0z"/>
-      </svg>
-      Seguici su Instagram
-    </a>
+<div class="ticker-wrap">
+  <div class="ticker">
+    <span>NUOVO DROP 🔥</span><span>STREETWEAR AUTENTICO</span><span>SCARPE · VESTITI · ACCESSORI</span>
+    <span>FOLLOW @DRIP__SANTA</span><span>SPEDIZIONE RAPIDA</span><span>QUALITÀ TOP</span>
+    <span>NUOVO DROP 🔥</span><span>STREETWEAR AUTENTICO</span><span>SCARPE · VESTITI · ACCESSORI</span>
+    <span>FOLLOW @DRIP__SANTA</span><span>SPEDIZIONE RAPIDA</span><span>QUALITÀ TOP</span>
   </div>
-</footer>
+</div>
 
+<div id="install-banner">
+  <p><strong>Installa l'app</strong><br/>Aggiungi Drip Santa alla home</p>
+  <button id="install-btn">Installa</button>
+  <button id="dismiss-btn">✕</button>
+</div>
 
+<!-- ══════════════════════════════════════ HOME ══ -->
+<div id="page-home" class="page active">
+  <section class="hero">
+    <div class="hero-bg"></div>
+    <div class="hero-tag">Nuovo Arrivo</div>
+    <div class="hero-main">
+      <div class="hero-text">
+        <h1>IL TUO<br/>POSTO PER<br/><em>STREETWEAR</em></h1>
+        <p class="hero-sub">SCARPE · VESTITI · ACCESSORI · ELETTRONICA</p>
+        <div class="hero-cta">
+          <button class="btn-primary" onclick="showPage('scarpe')">Shop Ora</button>
+          <button class="btn-secondary" onclick="showPage('info')">Chi Siamo</button>
+        </div>
+      </div>
+      <div class="hero-logo">
+        <img src="logodripsanta.png" alt="Drip Santa" />
+      </div>
+    </div>
+  </section>
+
+  <div class="section-header"><h2 class="section-title">CATE<span>GORIE</span></h2></div>
+  <div class="categories">
+    <div class="cat-card featured" onclick="showPage('scarpe')">
+      <div><div class="cat-emoji">👟</div><div class="cat-name">SCARPE</div><div class="cat-tag">Nike · Jordan · LV · Dior</div></div>
+      <div class="cat-arrow">→</div>
+    </div>
+    <div class="cat-card" onclick="showPage('vestiti')"><div class="cat-emoji">👕</div><div class="cat-name">VESTITI</div><div class="cat-tag">Felpe · Maglie · Jeans</div></div>
+    <div class="cat-card" onclick="showPage('accessori')"><div class="cat-emoji">💎</div><div class="cat-name">ACCESSORI</div><div class="cat-tag">Collane · Orologi · Borselli</div></div>
+    <div class="cat-card" onclick="showPage('calcio')"><div class="cat-emoji">⚽</div><div class="cat-name">CALCIO</div><div class="cat-tag">Serie A · Premier · LaLiga</div></div>
+    <div class="cat-card" onclick="showPage('borse')"><div class="cat-emoji">👜</div><div class="cat-name">BORSE</div><div class="cat-tag">Chanel · LV · Goyard · Dior</div></div>
+    <div class="cat-card" onclick="showPage('elettronica')"><div class="cat-emoji">🎧</div><div class="cat-name">ELETTRONICA</div><div class="cat-tag">AirPods · JBL · PS5</div></div>
+  </div>
+
+  <div class="section-header">
+    <h2 class="section-title">DROP <span>🔥</span></h2>
+    <button class="section-link" onclick="showPage('scarpe')">Vedi tutto</button>
+  </div>
+  <div class="product-grid">
+    <div class="product-card">
+      <div class="product-img"><img src="jordan4.jpg" alt="Jordan 4" onerror="this.style.display='none'">👟<div class="product-badge">HOT</div></div>
+      <div class="product-info"><div class="product-brand">Jordan</div><div class="product-name">Jordan 4 All Colorways</div><div class="product-price">€110</div></div>
+      <a class="product-dm" href="https://www.instagram.com/drip__santa/" target="_blank">DM su Instagram</a>
+    </div>
+    <div class="product-card">
+      <div class="product-img"><img src="felpa-denimtears.jpg" alt="Denim Tears" onerror="this.style.display='none'">👕<div class="product-badge yellow">TOP</div></div>
+      <div class="product-info"><div class="product-brand">Denim Tears</div><div class="product-name">Felpa Top Quality</div><div class="product-price">€90</div></div>
+      <a class="product-dm" href="https://www.instagram.com/drip__santa/" target="_blank">DM su Instagram</a>
+    </div>
+  </div>
+
+  <div class="ig-strip">
+    <div class="ig-strip-top"><div class="ig-icon">📸</div><div class="ig-text"><h3>@DRIP__SANTA</h3><p>NUOVI DROP OGNI GIORNO</p></div></div>
+    <a class="ig-link" href="https://www.instagram.com/drip__santa/" target="_blank">Seguici su Instagram →</a>
+  </div>
+
+  <div class="section-header">
+    <h2 class="section-title">RECEN<span>SIONI</span></h2>
+    <button class="section-link" onclick="showPage('recensioni')">Tutte</button>
+  </div>
+  <div class="reviews-scroll">
+    <div class="review-card"><div class="review-stars">★★★★★</div><p class="review-text">"Qualità top, spedizione velocissima!"</p><div class="review-author">⭐ Cliente verificato</div></div>
+    <div class="review-card"><div class="review-stars">★★★★★</div><p class="review-text">"Drip Santa non delude mai. 10/10"</p><div class="review-author">⭐ Cliente verificato</div></div>
+    <div class="review-card"><div class="review-stars">★★★★★</div><p class="review-text">"Assistenza perfetta, tornerò!"</p><div class="review-author">⭐ Cliente verificato</div></div>
+  </div>
+  <div class="bottom-spacer"></div>
+</div>
+
+<!-- ══════════════════════════════════════ SCARPE ══ -->
+<div id="page-scarpe" class="page">
+  <button class="back-btn" onclick="showPage('home')">← Home</button>
+  <div class="page-hero"><div class="page-hero-tag">Collezione</div><h2>SCARPE 👟</h2><p>Nike · Jordan · Dior · LV · Bape · Versace · Timberland</p></div>
+  <div class="section-header"><h2 class="section-title">TUTTI I <span>MODELLI</span></h2></div>
+  <div class="product-grid">
+    <div class="product-card"><div class="product-img"><img src="airforce1.jpg" alt="Air Force 1" onerror="this.style.display='none'">👟</div><div class="product-info"><div class="product-brand">Nike</div><div class="product-name">Air Force 1</div><div class="product-price">€70</div></div><a class="product-dm" href="https://www.instagram.com/drip__santa/" target="_blank">DM su IG</a></div>
+    <div class="product-card"><div class="product-img"><img src="af1offwhite.jpg" alt="AF1 Off-White" onerror="this.style.display='none'">👟<div class="product-badge">COLLAB</div></div><div class="product-info"><div class="product-brand">Nike × Off-White</div><div class="product-name">Air Force 1 Off-White</div><div class="product-price">€85</div></div><a class="product-dm" href="https://www.instagram.com/drip__santa/" target="_blank">DM su IG</a></div>
+    <div class="product-card"><div class="product-img"><img src="dunkpanda.jpg" alt="Dunk Panda" onerror="this.style.display='none'">👟</div><div class="product-info"><div class="product-brand">Nike</div><div class="product-name">Dunk Panda</div><div class="product-price">€65</div></div><a class="product-dm" href="https://www.instagram.com/drip__santa/" target="_blank">DM su IG</a></div>
+    <div class="product-card"><div class="product-img"><img src="tn.jpg" alt="Nike TN" onerror="this.style.display='none'">👟</div><div class="product-info"><div class="product-brand">Nike</div><div class="product-name">Nike TN</div><div class="product-price">€70</div></div><a class="product-dm" href="https://www.instagram.com/drip__santa/" target="_blank">DM su IG</a></div>
+    <div class="product-card"><div class="product-img"><img src="nikemind.jpg" alt="Nike Mind" onerror="this.style.display='none'">👟</div><div class="product-info"><div class="product-brand">Nike</div><div class="product-name">Nike Mind</div><div class="product-price">€60</div></div><a class="product-dm" href="https://www.instagram.com/drip__santa/" target="_blank">DM su IG</a></div>
+    <div class="product-card"><div class="product-img"><img src="jordan3.jpg" alt="Jordan 3" onerror="this.style.display='none'">👟</div><div class="product-info"><div class="product-brand">Jordan</div><div class="product-name">Jordan 3</div><div class="product-price">€75</div></div><a class="product-dm" href="https://www.instagram.com/drip__santa/" target="_blank">DM su IG</a></div>
+    <div class="product-card"><div class="product-img"><img src="jordan4.jpg" alt="Jordan 4" onerror="this.style.display='none'">👟<div class="product-badge yellow">HOT</div></div><div class="product-info"><div class="product-brand">Jordan</div><div class="product-name">Jordan 4 All Colorways</div><div class="product-price">€110</div></div><a class="product-dm" href="https://www.instagram.com/drip__santa/" target="_blank">DM su IG</a></div>
+    <div class="product-card"><div class="product-img"><img src="travislow.jpg" alt="Travis Low" onerror="this.style.display='none'">👟<div class="product-badge">COLLAB</div></div><div class="product-info"><div class="product-brand">Nike × Travis Scott</div><div class="product-name">Travis Scott Low</div><div class="product-price">€80</div></div><a class="product-dm" href="https://www.instagram.com/drip__santa/" target="_blank">DM su IG</a></div>
+    <div class="product-card"><div class="product-img"><img src="travishigh.jpg" alt="Travis High" onerror="this.style.display='none'">👟</div><div class="product-info"><div class="product-brand">Nike × Travis Scott</div><div class="product-name">Travis Scott High</div><div class="product-price">€70</div></div><a class="product-dm" href="https://www.instagram.com/drip__santa/" target="_blank">DM su IG</a></div>
+    <div class="product-card"><div class="product-img"><img src="yeezyslide.jpg" alt="Yeezy Slide" onerror="this.style.display='none'">👟</div><div class="product-info"><div class="product-brand">Adidas</div><div class="product-name">Yeezy Slide</div><div class="product-price">€40</div></div><a class="product-dm" href="https://www.instagram.com/drip__santa/" target="_blank">DM su IG</a></div>
+    <div class="product-card"><div class="product-img"><img src="diorb22.jpg" alt="Dior B22" onerror="this.style.display='none'">👟</div><div class="product-info"><div class="product-brand">Dior</div><div class="product-name">Dior B22</div><div class="product-price">€85</div></div><a class="product-dm" href="https://www.instagram.com/drip__santa/" target="_blank">DM su IG</a></div>
+    <div class="product-card"><div class="product-img"><img src="diorb30.jpg" alt="Dior B30" onerror="this.style.display='none'">👟</div><div class="product-info"><div class="product-brand">Dior</div><div class="product-name">Dior B30</div><div class="product-price">€65</div></div><a class="product-dm" href="https://www.instagram.com/drip__santa/" target="_blank">DM su IG</a></div>
+    <div class="product-card"><div class="product-img"><img src="lvskate.jpg" alt="LV Skate" onerror="this.style.display='none'">👟</div><div class="product-info"><div class="product-brand">Louis Vuitton</div><div class="product-name">LV Skate</div><div class="product-price">€90</div></div><a class="product-dm" href="https://www.instagram.com/drip__santa/" target="_blank">DM su IG</a></div>
+    <div class="product-card"><div class="product-img"><img src="lvtrainer.jpg" alt="LV Trainer" onerror="this.style.display='none'">👟</div><div class="product-info"><div class="product-brand">Louis Vuitton</div><div class="product-name">LV Trainer</div><div class="product-price">€90</div></div><a class="product-dm" href="https://www.instagram.com/drip__santa/" target="_blank">DM su IG</a></div>
+    <div class="product-card"><div class="product-img"><img src="timberlandlv.jpg" alt="Timberland LV" onerror="this.style.display='none'">👟<div class="product-badge">COLLAB</div></div><div class="product-info"><div class="product-brand">Timberland × LV</div><div class="product-name">Timberland x LV</div><div class="product-price">€80</div></div><a class="product-dm" href="https://www.instagram.com/drip__santa/" target="_blank">DM su IG</a></div>
+    <div class="product-card"><div class="product-img"><img src="timberland.jpg" alt="Timberland" onerror="this.style.display='none'">👟</div><div class="product-info"><div class="product-brand">Timberland</div><div class="product-name">Timberland</div><div class="product-price">€110</div></div><a class="product-dm" href="https://www.instagram.com/drip__santa/" target="_blank">DM su IG</a></div>
+    <div class="product-card"><div class="product-img"><img src="bapesta.jpg" alt="Bapesta" onerror="this.style.display='none'">👟</div><div class="product-info"><div class="product-brand">Bape</div><div class="product-name">Bapesta</div><div class="product-price">€75</div></div><a class="product-dm" href="https://www.instagram.com/drip__santa/" target="_blank">DM su IG</a></div>
+    <div class="product-card"><div class="product-img"><img src="versace.jpg" alt="Versace" onerror="this.style.display='none'">👟</div><div class="product-info"><div class="product-brand">Versace</div><div class="product-name">Versace Sneakers</div><div class="product-price">€80</div></div><a class="product-dm" href="https://www.instagram.com/drip__santa/" target="_blank">DM su IG</a></div>
+    <div class="product-card"><div class="product-img"><img src="pradacup.jpg" alt="Prada Cups" onerror="this.style.display='none'">👟</div><div class="product-info"><div class="product-brand">Prada</div><div class="product-name">Prada Cups</div><div class="product-price">€80</div></div><a class="product-dm" href="https://www.instagram.com/drip__santa/" target="_blank">DM su IG</a></div>
+    <div class="product-card"><div class="product-img"><img src="asicsgel.jpg" alt="Asics Gel" onerror="this.style.display='none'">👟</div><div class="product-info"><div class="product-brand">Asics</div><div class="product-name">Asics Gel</div><div class="product-price">€75</div></div><a class="product-dm" href="https://www.instagram.com/drip__santa/" target="_blank">DM su IG</a></div>
+  </div>
+  <div class="bottom-spacer"></div>
+</div>
+
+<!-- ══════════════════════════════════════ VESTITI ══ -->
+<div id="page-vestiti" class="page">
+  <button class="back-btn" onclick="showPage('home')">← Home</button>
+  <div class="page-hero"><div class="page-hero-tag">Collezione</div><h2>VESTITI 👕</h2><p>Pantaloni · Maglie · Felpe · Giacchetti</p></div>
+
+  <div class="sub-title">PANTALONI & JEANS</div>
+  <div class="product-grid">
+    <div class="product-card"><div class="product-img"><img src="jeans-gallerydept.jpg" alt="Gallery Dept" onerror="this.style.display='none'">👖</div><div class="product-info"><div class="product-brand">Gallery Dept</div><div class="product-name">Jeans Gallery Dept</div><div class="product-price">€50</div></div><a class="product-dm" href="https://www.instagram.com/drip__santa/" target="_blank">DM su IG</a></div>
+    <div class="product-card"><div class="product-img"><img src="jeans-amiri.jpg" alt="Amiri" onerror="this.style.display='none'">👖</div><div class="product-info"><div class="product-brand">Amiri</div><div class="product-name">Jeans Amiri</div><div class="product-price">€45</div></div><a class="product-dm" href="https://www.instagram.com/drip__santa/" target="_blank">DM su IG</a></div>
+    <div class="product-card"><div class="product-img"><img src="jeans-chromehearts.jpg" alt="Chrome Hearts" onerror="this.style.display='none'">👖</div><div class="product-info"><div class="product-brand">Chrome Hearts</div><div class="product-name">Jeans Chrome Hearts</div><div class="product-price">€45</div></div><a class="product-dm" href="https://www.instagram.com/drip__santa/" target="_blank">DM su IG</a></div>
+    <div class="product-card"><div class="product-img"><img src="tuta-nike.jpg" alt="Tuta Nike" onerror="this.style.display='none'">👖</div><div class="product-info"><div class="product-brand">Nike</div><div class="product-name">Pantaloni Tuta Nike</div><div class="product-price">€40</div></div><a class="product-dm" href="https://www.instagram.com/drip__santa/" target="_blank">DM su IG</a></div>
+    <div class="product-card"><div class="product-img"><img src="pantaloni-essentials.jpg" alt="Essentials" onerror="this.style.display='none'">👖</div><div class="product-info"><div class="product-brand">Essentials</div><div class="product-name">Pantaloni Essentials</div><div class="product-price">€40</div></div><a class="product-dm" href="https://www.instagram.com/drip__santa/" target="_blank">DM su IG</a></div>
+  </div>
+
+  <div class="sub-title">MAGLIE</div>
+  <div class="product-grid">
+    <div class="product-card"><div class="product-img"><img src="maglia-stussy-1.jpg" alt="Stussy" onerror="this.style.display='none'">👕</div><div class="product-info"><div class="product-brand">Stussy</div><div class="product-name">Maglia Stussy</div><div class="product-price">€35</div></div><a class="product-dm" href="https://www.instagram.com/drip__santa/" target="_blank">DM su IG</a></div>
+    <div class="product-card"><div class="product-img"><img src="maglia-stussy-2.jpg" alt="Stussy 2" onerror="this.style.display='none'">👕</div><div class="product-info"><div class="product-brand">Stussy</div><div class="product-name">Maglia Stussy</div><div class="product-price">€35</div></div><a class="product-dm" href="https://www.instagram.com/drip__santa/" target="_blank">DM su IG</a></div>
+    <div class="product-card"><div class="product-img"><img src="polo-ralph-tokyo.jpg" alt="Ralph Lauren" onerror="this.style.display='none'">👕</div><div class="product-info"><div class="product-brand">Ralph Lauren</div><div class="product-name">Polo Ralph Lauren Tokyo</div><div class="product-price">€40</div></div><a class="product-dm" href="https://www.instagram.com/drip__santa/" target="_blank">DM su IG</a></div>
+    <div class="product-card"><div class="product-img"><img src="corteiz-short.jpg" alt="Corteiz" onerror="this.style.display='none'">👕</div><div class="product-info"><div class="product-brand">Corteiz</div><div class="product-name">Corteiz Maniche Corte</div><div class="product-price">€40</div></div><a class="product-dm" href="https://www.instagram.com/drip__santa/" target="_blank">DM su IG</a></div>
+    <div class="product-card"><div class="product-img"><img src="corteiz-long.jpg" alt="Corteiz Long" onerror="this.style.display='none'">👕</div><div class="product-info"><div class="product-brand">Corteiz</div><div class="product-name">Corteiz Maniche Lunghe</div><div class="product-price">€40</div></div><a class="product-dm" href="https://www.instagram.com/drip__santa/" target="_blank">DM su IG</a></div>
+  </div>
+
+  <div class="sub-title">FELPE</div>
+  <div class="product-grid">
+    <div class="product-card"><div class="product-img"><img src="felpa-stussy.jpg" alt="Stussy" onerror="this.style.display='none'">👕</div><div class="product-info"><div class="product-brand">Stussy</div><div class="product-name">Felpa Stussy</div><div class="product-price">€45</div></div><a class="product-dm" href="https://www.instagram.com/drip__santa/" target="_blank">DM su IG</a></div>
+    <div class="product-card"><div class="product-img"><img src="felpa-supreme.jpg" alt="Supreme" onerror="this.style.display='none'">👕</div><div class="product-info"><div class="product-brand">Supreme</div><div class="product-name">Felpa Supreme</div><div class="product-price">€45</div></div><a class="product-dm" href="https://www.instagram.com/drip__santa/" target="_blank">DM su IG</a></div>
+    <div class="product-card"><div class="product-img"><img src="felpa-essentials.jpg" alt="Essentials" onerror="this.style.display='none'">👕</div><div class="product-info"><div class="product-brand">Essentials</div><div class="product-name">Felpa Essentials</div><div class="product-price">€50</div></div><a class="product-dm" href="https://www.instagram.com/drip__santa/" target="_blank">DM su IG</a></div>
+    <div class="product-card"><div class="product-img"><img src="felpa-ralph-zip.jpg" alt="Ralph Zip" onerror="this.style.display='none'">👕</div><div class="product-info"><div class="product-brand">Ralph Lauren</div><div class="product-name">Felpa Zip Ralph Lauren</div><div class="product-price">€50</div></div><a class="product-dm" href="https://www.instagram.com/drip__santa/" target="_blank">DM su IG</a></div>
+    <div class="product-card"><div class="product-img"><img src="maglioncino-ralph.jpg" alt="Ralph" onerror="this.style.display='none'">👕</div><div class="product-info"><div class="product-brand">Ralph Lauren</div><div class="product-name">Maglioncino Ralph Lauren</div><div class="product-price">€50</div></div><a class="product-dm" href="https://www.instagram.com/drip__santa/" target="_blank">DM su IG</a></div>
+    <div class="product-card"><div class="product-img"><img src="felpa-sp5der.jpg" alt="Sp5der" onerror="this.style.display='none'">👕</div><div class="product-info"><div class="product-brand">Sp5der</div><div class="product-name">Felpa Sp5der</div><div class="product-price">€50</div></div><a class="product-dm" href="https://www.instagram.com/drip__santa/" target="_blank">DM su IG</a></div>
+    <div class="product-card"><div class="product-img"><img src="felpa-denimtears.jpg" alt="Denim Tears" onerror="this.style.display='none'">👕<div class="product-badge yellow">TOP</div></div><div class="product-info"><div class="product-brand">Denim Tears</div><div class="product-name">Felpa Denim Tears</div><div class="product-price">€90</div></div><a class="product-dm" href="https://www.instagram.com/drip__santa/" target="_blank">DM su IG</a></div>
+    <div class="product-card"><div class="product-img"><img src="felpa-burberry-zip.jpg" alt="Burberry" onerror="this.style.display='none'">👕</div><div class="product-info"><div class="product-brand">Burberry</div><div class="product-name">Felpa Zip Burberry</div><div class="product-price">€65</div></div><a class="product-dm" href="https://www.instagram.com/drip__santa/" target="_blank">DM su IG</a></div>
+  </div>
+
+  <div class="sub-title">GIACCHETTI</div>
+  <div class="product-grid">
+    <div class="product-card"><div class="product-img"><img src="giacchetto-burberry.jpg" alt="Burberry" onerror="this.style.display='none'">🧥</div><div class="product-info"><div class="product-brand">Burberry</div><div class="product-name">Giacchetto Burberry</div><div class="product-price">€90</div></div><a class="product-dm" href="https://www.instagram.com/drip__santa/" target="_blank">DM su IG</a></div>
+    <div class="product-card"><div class="product-img"><img src="giacchetto-canadagoose.jpg" alt="Canada Goose" onerror="this.style.display='none'">🧥</div><div class="product-info"><div class="product-brand">Canada Goose</div><div class="product-name">Giacchetto Canada Goose</div><div class="product-price">€90</div></div><a class="product-dm" href="https://www.instagram.com/drip__santa/" target="_blank">DM su IG</a></div>
+    <div class="product-card"><div class="product-img"><img src="giacchetto-napapijri.jpg" alt="Napapijri" onerror="this.style.display='none'">🧥</div><div class="product-info"><div class="product-brand">Napapijri</div><div class="product-name">Giacchetto Napapijri</div><div class="product-price">€85</div></div><a class="product-dm" href="https://www.instagram.com/drip__santa/" target="_blank">DM su IG</a></div>
+    <div class="product-card"><div class="product-img"><img src="giacchetto-moncler.jpg" alt="Moncler" onerror="this.style.display='none'">🧥</div><div class="product-info"><div class="product-brand">Moncler</div><div class="product-name">Giacchetto Moncler</div><div class="product-price">€85</div></div><a class="product-dm" href="https://www.instagram.com/drip__santa/" target="_blank">DM su IG</a></div>
+    <div class="product-card"><div class="product-img"><img src="giacchetto-northface.jpg" alt="North Face" onerror="this.style.display='none'">🧥</div><div class="product-info"><div class="product-brand">The North Face</div><div class="product-name">Giacchetto North Face</div><div class="product-price">€90</div></div><a class="product-dm" href="https://www.instagram.com/drip__santa/" target="_blank">DM su IG</a></div>
+    <div class="product-card"><div class="product-img"><img src="giacchetto-ralph.jpg" alt="Ralph" onerror="this.style.display='none'">🧥</div><div class="product-info"><div class="product-brand">Ralph Lauren</div><div class="product-name">Giacchetto Ralph Lauren</div><div class="product-price">€90</div></div><a class="product-dm" href="https://www.instagram.com/drip__santa/" target="_blank">DM su IG</a></div>
+    <div class="product-card"><div class="product-img"><img src="giacchetto-moose.jpg" alt="Moose Knuckles" onerror="this.style.display='none'">🧥</div><div class="product-info"><div class="product-brand">Moose Knuckles</div><div class="product-name">Giacchetto Moose Knuckles</div><div class="product-price">€90</div></div><a class="product-dm" href="https://www.instagram.com/drip__santa/" target="_blank">DM su IG</a></div>
+  </div>
+  <div class="bottom-spacer"></div>
+</div>
+
+<!-- ══════════════════════════════════════ ACCESSORI ══ -->
+<div id="page-accessori" class="page">
+  <button class="back-btn" onclick="showPage('home')">← Home</button>
+  <div class="page-hero"><div class="page-hero-tag">Collezione</div><h2>ACCESSORI 💎</h2><p>Collane · Bracciali · Orologi · Borselli · Portafogli</p></div>
+  <div class="section-header"><h2 class="section-title">TUTTI GLI <span>ACCESSORI</span></h2></div>
+  <div class="product-grid">
+    <div class="product-card"><div class="product-img"><img src="collana-prada.jpg" alt="Collana Prada" onerror="this.style.display='none'">💎</div><div class="product-info"><div class="product-brand">Prada</div><div class="product-name">Collana Prada</div><div class="product-price">€20</div></div><a class="product-dm" href="https://www.instagram.com/drip__santa/" target="_blank">DM su IG</a></div>
+    <div class="product-card"><div class="product-img"><img src="bracciali-vancleef.jpg" alt="Van Cleef" onerror="this.style.display='none'">💎</div><div class="product-info"><div class="product-brand">Van Cleef</div><div class="product-name">Bracciali Van Cleef Alhambra</div><div class="product-price">€18</div></div><a class="product-dm" href="https://www.instagram.com/drip__santa/" target="_blank">DM su IG</a></div>
+    <div class="product-card"><div class="product-img"><img src="berretti-sp5der.jpg" alt="Sp5der" onerror="this.style.display='none'">🧢</div><div class="product-info"><div class="product-brand">Sp5der</div><div class="product-name">Berretti Sp5der</div><div class="product-price">€25</div></div><a class="product-dm" href="https://www.instagram.com/drip__santa/" target="_blank">DM su IG</a></div>
+    <div class="product-card"><div class="product-img"><img src="orologi-vari.jpg" alt="Orologi" onerror="this.style.display='none'">⌚</div><div class="product-info"><div class="product-brand">Luxury</div><div class="product-name">Orologi Vari</div><div class="product-price">€50</div></div><a class="product-dm" href="https://www.instagram.com/drip__santa/" target="_blank">DM su IG</a></div>
+    <div class="product-card"><div class="product-img"><img src="borsa-chanel.jpg" alt="Chanel" onerror="this.style.display='none'">👜</div><div class="product-info"><div class="product-brand">Chanel</div><div class="product-name">Borsa Chanel</div><div class="product-price">€50</div></div><a class="product-dm" href="https://www.instagram.com/drip__santa/" target="_blank">DM su IG</a></div>
+    <div class="product-card"><div class="product-img"><img src="portacarte-goyard.jpg" alt="Goyard" onerror="this.style.display='none'">👛</div><div class="product-info"><div class="product-brand">Goyard</div><div class="product-name">Porta Carte Goyard</div><div class="product-price">€17</div></div><a class="product-dm" href="https://www.instagram.com/drip__santa/" target="_blank">DM su IG</a></div>
+    <div class="product-card"><div class="product-img"><img src="borsello-lv.jpg" alt="LV" onerror="this.style.display='none'">👜</div><div class="product-info"><div class="product-brand">Louis Vuitton</div><div class="product-name">Borsello Louis Vuitton</div><div class="product-price">€50</div></div><a class="product-dm" href="https://www.instagram.com/drip__santa/" target="_blank">DM su IG</a></div>
+    <div class="product-card"><div class="product-img"><img src="borsello-gucci.jpg" alt="Gucci" onerror="this.style.display='none'">👜</div><div class="product-info"><div class="product-brand">Gucci</div><div class="product-name">Borsello Gucci</div><div class="product-price">€35</div></div><a class="product-dm" href="https://www.instagram.com/drip__santa/" target="_blank">DM su IG</a></div>
+    <div class="product-card"><div class="product-img"><img src="portafoglio-lv.jpg" alt="Portafoglio LV" onerror="this.style.display='none'">👛</div><div class="product-info"><div class="product-brand">Louis Vuitton</div><div class="product-name">Portafoglio Louis Vuitton</div><div class="product-price">€35</div></div><a class="product-dm" href="https://www.instagram.com/drip__santa/" target="_blank">DM su IG</a></div>
+  </div>
+  <div class="bottom-spacer"></div>
+</div>
+
+<!-- ══════════════════════════════════════ CALCIO ══ -->
+<div id="page-calcio" class="page">
+  <button class="back-btn" onclick="showPage('home')">← Home</button>
+  <div class="page-hero"><div class="page-hero-tag">Collezione</div><h2>CALCIO ⚽</h2><p>Serie A · Premier League · LaLiga · Ligue 1 · Bundesliga — tutte €45</p></div>
+
+  <div class="sub-title">🇮🇹 Serie A</div>
+  <div class="product-grid">
+    <div class="product-card"><div class="product-img"><img src="napoli-home.jpg" alt="Napoli" onerror="this.style.display='none'">⚽</div><div class="product-info"><div class="product-brand">Napoli</div><div class="product-name">Napoli Home</div><div class="product-price">€45</div></div><a class="product-dm" href="https://www.instagram.com/drip__santa/" target="_blank">DM su IG</a></div>
+    <div class="product-card"><div class="product-img"><img src="napoli-away.jpg" alt="Napoli Away" onerror="this.style.display='none'">⚽</div><div class="product-info"><div class="product-brand">Napoli</div><div class="product-name">Napoli Away</div><div class="product-price">€45</div></div><a class="product-dm" href="https://www.instagram.com/drip__santa/" target="_blank">DM su IG</a></div>
+    <div class="product-card"><div class="product-img"><img src="napoli-third.jpg" alt="Napoli Third" onerror="this.style.display='none'">⚽</div><div class="product-info"><div class="product-brand">Napoli</div><div class="product-name">Napoli Third</div><div class="product-price">€45</div></div><a class="product-dm" href="https://www.instagram.com/drip__santa/" target="_blank">DM su IG</a></div>
+    <div class="product-card"><div class="product-img"><img src="juve-home.jpg" alt="Juve" onerror="this.style.display='none'">⚽</div><div class="product-info"><div class="product-brand">Juventus</div><div class="product-name">Juventus Home</div><div class="product-price">€45</div></div><a class="product-dm" href="https://www.instagram.com/drip__santa/" target="_blank">DM su IG</a></div>
+    <div class="product-card"><div class="product-img"><img src="juve-away.jpg" alt="Juve Away" onerror="this.style.display='none'">⚽</div><div class="product-info"><div class="product-brand">Juventus</div><div class="product-name">Juventus Away</div><div class="product-price">€45</div></div><a class="product-dm" href="https://www.instagram.com/drip__santa/" target="_blank">DM su IG</a></div>
+    <div class="product-card"><div class="product-img"><img src="juve-third.jpg" alt="Juve Third" onerror="this.style.display='none'">⚽</div><div class="product-info"><div class="product-brand">Juventus</div><div class="product-name">Juventus Third</div><div class="product-price">€45</div></div><a class="product-dm" href="https://www.instagram.com/drip__santa/" target="_blank">DM su IG</a></div>
+    <div class="product-card"><div class="product-img"><img src="inter-home.jpg" alt="Inter" onerror="this.style.display='none'">⚽</div><div class="product-info"><div class="product-brand">Inter</div><div class="product-name">Inter Home</div><div class="product-price">€45</div></div><a class="product-dm" href="https://www.instagram.com/drip__santa/" target="_blank">DM su IG</a></div>
+    <div class="product-card"><div class="product-img"><img src="inter-away.jpg" alt="Inter Away" onerror="this.style.display='none'">⚽</div><div class="product-info"><div class="product-brand">Inter</div><div class="product-name">Inter Away</div><div class="product-price">€45</div></div><a class="product-dm" href="https://www.instagram.com/drip__santa/" target="_blank">DM su IG</a></div>
+    <div class="product-card"><div class="product-img"><img src="inter-third.jpg" alt="Inter Third" onerror="this.style.display='none'">⚽</div><div class="product-info"><div class="product-brand">Inter</div><div class="product-name">Inter Third</div><div class="product-price">€45</div></div><a class="product-dm" href="https://www.instagram.com/drip__santa/" target="_blank">DM su IG</a></div>
+    <div class="product-card"><div class="product-img"><img src="milan-home.jpg" alt="Milan" onerror="this.style.display='none'">⚽</div><div class="product-info"><div class="product-brand">Milan</div><div class="product-name">Milan Home</div><div class="product-price">€45</div></div><a class="product-dm" href="https://www.instagram.com/drip__santa/" target="_blank">DM su IG</a></div>
+    <div class="product-card"><div class="product-img"><img src="milan-away.jpg" alt="Milan Away" onerror="this.style.display='none'">⚽</div><div class="product-info"><div class="product-brand">Milan</div><div class="product-name">Milan Away</div><div class="product-price">€45</div></div><a class="product-dm" href="https://www.instagram.com/drip__santa/" target="_blank">DM su IG</a></div>
+    <div class="product-card"><div class="product-img"><img src="milan-third.jpg" alt="Milan Third" onerror="this.style.display='none'">⚽</div><div class="product-info"><div class="product-brand">Milan</div><div class="product-name">Milan Third</div><div class="product-price">€45</div></div><a class="product-dm" href="https://www.instagram.com/drip__santa/" target="_blank">DM su IG</a></div>
+  </div>
+
+  <div class="sub-title">🏴󠁧󠁢󠁥󠁮󠁧󠁿 Premier League</div>
+  <div class="product-grid">
+    <div class="product-card"><div class="product-img"><img src="liverpool-home.jpg" alt="Liverpool" onerror="this.style.display='none'">⚽</div><div class="product-info"><div class="product-brand">Liverpool</div><div class="product-name">Liverpool Home</div><div class="product-price">€45</div></div><a class="product-dm" href="https://www.instagram.com/drip__santa/" target="_blank">DM su IG</a></div>
+    <div class="product-card"><div class="product-img"><img src="liverpool-away.jpg" alt="Liverpool Away" onerror="this.style.display='none'">⚽</div><div class="product-info"><div class="product-brand">Liverpool</div><div class="product-name">Liverpool Away</div><div class="product-price">€45</div></div><a class="product-dm" href="https://www.instagram.com/drip__santa/" target="_blank">DM su IG</a></div>
+    <div class="product-card"><div class="product-img"><img src="liverpool-third.jpg" alt="Liverpool Third" onerror="this.style.display='none'">⚽</div><div class="product-info"><div class="product-brand">Liverpool</div><div class="product-name">Liverpool Third</div><div class="product-price">€45</div></div><a class="product-dm" href="https://www.instagram.com/drip__santa/" target="_blank">DM su IG</a></div>
+    <div class="product-card"><div class="product-img"><img src="mancity-home.jpg" alt="Man City" onerror="this.style.display='none'">⚽</div><div class="product-info"><div class="product-brand">Man City</div><div class="product-name">Man City Home</div><div class="product-price">€45</div></div><a class="product-dm" href="https://www.instagram.com/drip__santa/" target="_blank">DM su IG</a></div>
+    <div class="product-card"><div class="product-img"><img src="mancity-away.jpg" alt="Man City Away" onerror="this.style.display='none'">⚽</div><div class="product-info"><div class="product-brand">Man City</div><div class="product-name">Man City Away</div><div class="product-price">€45</div></div><a class="product-dm" href="https://www.instagram.com/drip__santa/" target="_blank">DM su IG</a></div>
+    <div class="product-card"><div class="product-img"><img src="mancity-third.jpg" alt="Man City Third" onerror="this.style.display='none'">⚽</div><div class="product-info"><div class="product-brand">Man City</div><div class="product-name">Man City Third</div><div class="product-price">€45</div></div><a class="product-dm" href="https://www.instagram.com/drip__santa/" target="_blank">DM su IG</a></div>
+    <div class="product-card"><div class="product-img"><img src="manunited-home.jpg" alt="Man Utd" onerror="this.style.display='none'">⚽</div><div class="product-info"><div class="product-brand">Man United</div><div class="product-name">Man United Home</div><div class="product-price">€45</div></div><a class="product-dm" href="https://www.instagram.com/drip__santa/" target="_blank">DM su IG</a></div>
+    <div class="product-card"><div class="product-img"><img src="manunited-away.jpg" alt="Man Utd Away" onerror="this.style.display='none'">⚽</div><div class="product-info"><div class="product-brand">Man United</div><div class="product-name">Man United Away</div><div class="product-price">€45</div></div><a class="product-dm" href="https://www.instagram.com/drip__santa/" target="_blank">DM su IG</a></div>
+    <div class="product-card"><div class="product-img"><img src="arsenal-home.jpg" alt="Arsenal" onerror="this.style.display='none'">⚽</div><div class="product-info"><div class="product-brand">Arsenal</div><div class="product-name">Arsenal Home</div><div class="product-price">€45</div></div><a class="product-dm" href="https://www.instagram.com/drip__santa/" target="_blank">DM su IG</a></div>
+    <div class="product-card"><div class="product-img"><img src="arsenal-away.jpg" alt="Arsenal Away" onerror="this.style.display='none'">⚽</div><div class="product-info"><div class="product-brand">Arsenal</div><div class="product-name">Arsenal Away</div><div class="product-price">€45</div></div><a class="product-dm" href="https://www.instagram.com/drip__santa/" target="_blank">DM su IG</a></div>
+    <div class="product-card"><div class="product-img"><img src="chelsea-home.jpg" alt="Chelsea" onerror="this.style.display='none'">⚽</div><div class="product-info"><div class="product-brand">Chelsea</div><div class="product-name">Chelsea Home</div><div class="product-price">€45</div></div><a class="product-dm" href="https://www.instagram.com/drip__santa/" target="_blank">DM su IG</a></div>
+    <div class="product-card"><div class="product-img"><img src="chelsea-away.jpg" alt="Chelsea Away" onerror="this.style.display='none'">⚽</div><div class="product-info"><div class="product-brand">Chelsea</div><div class="product-name">Chelsea Away</div><div class="product-price">€45</div></div><a class="product-dm" href="https://www.instagram.com/drip__santa/" target="_blank">DM su IG</a></div>
+  </div>
+
+  <div class="sub-title">🇪🇸 La Liga</div>
+  <div class="product-grid">
+    <div class="product-card"><div class="product-img"><img src="barcellona-home.jpg" alt="Barcellona" onerror="this.style.display='none'">⚽</div><div class="product-info"><div class="product-brand">Barcellona</div><div class="product-name">Barcellona Home</div><div class="product-price">€45</div></div><a class="product-dm" href="https://www.instagram.com/drip__santa/" target="_blank">DM su IG</a></div>
+    <div class="product-card"><div class="product-img"><img src="barcellona-away.jpg" alt="Barcellona Away" onerror="this.style.display='none'">⚽</div><div class="product-info"><div class="product-brand">Barcellona</div><div class="product-name">Barcellona Away</div><div class="product-price">€45</div></div><a class="product-dm" href="https://www.instagram.com/drip__santa/" target="_blank">DM su IG</a></div>
+    <div class="product-card"><div class="product-img"><img src="barcellona-third.jpg" alt="Barcellona Third" onerror="this.style.display='none'">⚽</div><div class="product-info"><div class="product-brand">Barcellona</div><div class="product-name">Barcellona Third</div><div class="product-price">€45</div></div><a class="product-dm" href="https://www.instagram.com/drip__santa/" target="_blank">DM su IG</a></div>
+    <div class="product-card"><div class="product-img"><img src="real-home.jpg" alt="Real Madrid" onerror="this.style.display='none'">⚽</div><div class="product-info"><div class="product-brand">Real Madrid</div><div class="product-name">Real Madrid Home</div><div class="product-price">€45</div></div><a class="product-dm" href="https://www.instagram.com/drip__santa/" target="_blank">DM su IG</a></div>
+    <div class="product-card"><div class="product-img"><img src="real-away.jpg" alt="Real Away" onerror="this.style.display='none'">⚽</div><div class="product-info"><div class="product-brand">Real Madrid</div><div class="product-name">Real Madrid Away</div><div class="product-price">€45</div></div><a class="product-dm" href="https://www.instagram.com/drip__santa/" target="_blank">DM su IG</a></div>
+    <div class="product-card"><div class="product-img"><img src="atletico-home.jpg" alt="Atletico" onerror="this.style.display='none'">⚽</div><div class="product-info"><div class="product-brand">Atletico Madrid</div><div class="product-name">Atletico Home</div><div class="product-price">€45</div></div><a class="product-dm" href="https://www.instagram.com/drip__santa/" target="_blank">DM su IG</a></div>
+    <div class="product-card"><div class="product-img"><img src="atletico-away.jpg" alt="Atletico Away" onerror="this.style.display='none'">⚽</div><div class="product-info"><div class="product-brand">Atletico Madrid</div><div class="product-name">Atletico Away</div><div class="product-price">€45</div></div><a class="product-dm" href="https://www.instagram.com/drip__santa/" target="_blank">DM su IG</a></div>
+  </div>
+
+  <div class="sub-title">🇫🇷 Ligue 1</div>
+  <div class="product-grid">
+    <div class="product-card"><div class="product-img"><img src="psg-home.jpg" alt="PSG" onerror="this.style.display='none'">⚽</div><div class="product-info"><div class="product-brand">PSG</div><div class="product-name">PSG Home</div><div class="product-price">€45</div></div><a class="product-dm" href="https://www.instagram.com/drip__santa/" target="_blank">DM su IG</a></div>
+    <div class="product-card"><div class="product-img"><img src="psg-away.jpg" alt="PSG Away" onerror="this.style.display='none'">⚽</div><div class="product-info"><div class="product-brand">PSG</div><div class="product-name">PSG Away</div><div class="product-price">€45</div></div><a class="product-dm" href="https://www.instagram.com/drip__santa/" target="_blank">DM su IG</a></div>
+    <div class="product-card"><div class="product-img"><img src="psg-third.jpg" alt="PSG Third" onerror="this.style.display='none'">⚽</div><div class="product-info"><div class="product-brand">PSG</div><div class="product-name">PSG Third</div><div class="product-price">€45</div></div><a class="product-dm" href="https://www.instagram.com/drip__santa/" target="_blank">DM su IG</a></div>
+  </div>
+
+  <div class="sub-title">🇩🇪 Bundesliga</div>
+  <div class="product-grid">
+    <div class="product-card"><div class="product-img"><img src="bayern-home.jpg" alt="Bayern" onerror="this.style.display='none'">⚽</div><div class="product-info"><div class="product-brand">Bayern Monaco</div><div class="product-name">Bayern Monaco Home</div><div class="product-price">€45</div></div><a class="product-dm" href="https://www.instagram.com/drip__santa/" target="_blank">DM su IG</a></div>
+    <div class="product-card"><div class="product-img"><img src="bayern-away.jpg" alt="Bayern Away" onerror="this.style.display='none'">⚽</div><div class="product-info"><div class="product-brand">Bayern Monaco</div><div class="product-name">Bayern Monaco Away</div><div class="product-price">€45</div></div><a class="product-dm" href="https://www.instagram.com/drip__santa/" target="_blank">DM su IG</a></div>
+    <div class="product-card"><div class="product-img"><img src="dortmund-home.jpg" alt="Dortmund" onerror="this.style.display='none'">⚽</div><div class="product-info"><div class="product-brand">Borussia Dortmund</div><div class="product-name">Dortmund Home</div><div class="product-price">€45</div></div><a class="product-dm" href="https://www.instagram.com/drip__santa/" target="_blank">DM su IG</a></div>
+    <div class="product-card"><div class="product-img"><img src="dortmund-away.jpg" alt="Dortmund Away" onerror="this.style.display='none'">⚽</div><div class="product-info"><div class="product-brand">Borussia Dortmund</div><div class="product-name">Dortmund Away</div><div class="product-price">€45</div></div><a class="product-dm" href="https://www.instagram.com/drip__santa/" target="_blank">DM su IG</a></div>
+  </div>
+  <div class="bottom-spacer"></div>
+</div>
+
+<!-- ══════════════════════════════════════ BORSE ══ -->
+<div id="page-borse" class="page">
+  <button class="back-btn" onclick="showPage('home')">← Home</button>
+  <div class="page-hero"><div class="page-hero-tag">Collezione</div><h2>BORSE 👜</h2><p>Goyard · Chanel · Louis Vuitton · Dior · Gucci</p></div>
+  <div class="section-header"><h2 class="section-title">TUTTE LE <span>BORSE</span></h2></div>
+  <div class="product-grid">
+    <div class="product-card"><div class="product-img"><img src="borsa-goyard.jpg" alt="Goyard" onerror="this.style.display='none'">👜</div><div class="product-info"><div class="product-brand">Goyard</div><div class="product-name">Borsa Goyard</div><div class="product-price">€60</div></div><a class="product-dm" href="https://www.instagram.com/drip__santa/" target="_blank">DM su IG</a></div>
+    <div class="product-card"><div class="product-img"><img src="borsetta-chanel.jpg" alt="Chanel" onerror="this.style.display='none'">👜</div><div class="product-info"><div class="product-brand">Chanel</div><div class="product-name">Borsetta Chanel</div><div class="product-price">€50</div></div><a class="product-dm" href="https://www.instagram.com/drip__santa/" target="_blank">DM su IG</a></div>
+    <div class="product-card"><div class="product-img"><img src="borsetta-lv.jpg" alt="LV" onerror="this.style.display='none'">👜</div><div class="product-info"><div class="product-brand">Louis Vuitton</div><div class="product-name">Borsetta Louis Vuitton</div><div class="product-price">€55</div></div><a class="product-dm" href="https://www.instagram.com/drip__santa/" target="_blank">DM su IG</a></div>
+    <div class="product-card"><div class="product-img"><img src="borsetta-dior.jpg" alt="Dior" onerror="this.style.display='none'">👜</div><div class="product-info"><div class="product-brand">Dior</div><div class="product-name">Borsetta Dior</div><div class="product-price">€45</div></div><a class="product-dm" href="https://www.instagram.com/drip__santa/" target="_blank">DM su IG</a></div>
+    <div class="product-card"><div class="product-img"><img src="borsetta-gucci.jpg" alt="Gucci" onerror="this.style.display='none'">👜</div><div class="product-info"><div class="product-brand">Gucci</div><div class="product-name">Borsetta Gucci</div><div class="product-price">€50</div></div><a class="product-dm" href="https://www.instagram.com/drip__santa/" target="_blank">DM su IG</a></div>
+  </div>
+  <div class="bottom-spacer"></div>
+</div>
+
+<!-- ══════════════════════════════════════ ELETTRONICA ══ -->
+<div id="page-elettronica" class="page">
+  <button class="back-btn" onclick="showPage('home')">← Home</button>
+  <div class="page-hero"><div class="page-hero-tag">Collezione</div><h2>ELETTRONICA 🎧</h2><p>AirPods · JBL · Controller PS5 · Casse</p></div>
+  <div class="section-header"><h2 class="section-title">TUTTO IL <span>TECH</span></h2></div>
+  <div class="product-grid">
+    <div class="product-card"><div class="product-img"><img src="airpods-pro2.jpg" alt="AirPods Pro 2" onerror="this.style.display='none'">🎧<div class="product-badge yellow">TOP</div></div><div class="product-info"><div class="product-brand">Apple</div><div class="product-name">AirPods Pro 2</div><div class="product-price">Buona: €65</div><div class="product-price2">Top Quality: €90</div></div><a class="product-dm" href="https://www.instagram.com/drip__santa/" target="_blank">DM su IG</a></div>
+    <div class="product-card"><div class="product-img"><img src="airpods-3.jpg" alt="AirPods 3" onerror="this.style.display='none'">🎧</div><div class="product-info"><div class="product-brand">Apple</div><div class="product-name">AirPods 3</div><div class="product-price">Top Quality: €80</div></div><a class="product-dm" href="https://www.instagram.com/drip__santa/" target="_blank">DM su IG</a></div>
+    <div class="product-card"><div class="product-img"><img src="airpods-pro3.jpg" alt="AirPods Pro 3" onerror="this.style.display='none'">🎧<div class="product-badge">NEW</div></div><div class="product-info"><div class="product-brand">Apple</div><div class="product-name">AirPods Pro 3</div><div class="product-price">Top Quality: €95</div></div><a class="product-dm" href="https://www.instagram.com/drip__santa/" target="_blank">DM su IG</a></div>
+    <div class="product-card"><div class="product-img"><img src="airpods-4.jpg" alt="AirPods 4" onerror="this.style.display='none'">🎧</div><div class="product-info"><div class="product-brand">Apple</div><div class="product-name">AirPods 4</div><div class="product-price">Buona: €75</div><div class="product-price2">Top Quality: €95</div></div><a class="product-dm" href="https://www.instagram.com/drip__santa/" target="_blank">DM su IG</a></div>
+    <div class="product-card"><div class="product-img"><img src="controller-ps5.jpg" alt="PS5" onerror="this.style.display='none'">🎮</div><div class="product-info"><div class="product-brand">Sony</div><div class="product-name">Controller PS5</div><div class="product-price">€30</div></div><a class="product-dm" href="https://www.instagram.com/drip__santa/" target="_blank">DM su IG</a></div>
+    <div class="product-card"><div class="product-img"><img src="cassa-jbl.jpg" alt="JBL" onerror="this.style.display='none'">🔊</div><div class="product-info"><div class="product-brand">JBL</div><div class="product-name">Cassa JBL</div><div class="product-price">€55</div></div><a class="product-dm" href="https://www.instagram.com/drip__santa/" target="_blank">DM su IG</a></div>
+  </div>
+  <div class="bottom-spacer"></div>
+</div>
+
+<!-- ══════════════════════════════════════ RECENSIONI ══ -->
+<div id="page-recensioni" class="page">
+  <button class="back-btn" onclick="showPage('home')">← Home</button>
+  <div class="page-hero"><div class="page-hero-tag">Clienti</div><h2>RECENSIONI ⭐</h2><p>Cosa dicono i nostri clienti</p></div>
+  <div class="section-header"><h2 class="section-title">TUTTE LE <span>RECENSIONI</span></h2></div>
+  <div class="reviews-grid">
+    <div class="review-card-full"><div class="review-header"><div class="review-stars">★★★★★</div><div class="review-verified">VERIFICATO</div></div><p class="review-text">"Pezzi di qualità top, spedizione velocissima. Le scarpe erano esattamente come nelle foto."</p><div class="review-author">⭐ Cliente verificato</div></div>
+    <div class="review-card-full"><div class="review-header"><div class="review-stars">★★★★★</div><div class="review-verified">VERIFICATO</div></div><p class="review-text">"Le Nike erano identiche all'originale. Drip Santa non delude mai, è il mio shop di fiducia."</p><div class="review-author">⭐ Cliente verificato</div></div>
+    <div class="review-card-full"><div class="review-header"><div class="review-stars">★★★★★</div><div class="review-verified">VERIFICATO</div></div><p class="review-text">"Assistenza top, mi hanno aiutato a trovare la taglia giusta via DM in pochi minuti."</p><div class="review-author">⭐ Cliente verificato</div></div>
+    <div class="review-card-full"><div class="review-header"><div class="review-stars">★★★★★</div><div class="review-verified">VERIFICATO</div></div><p class="review-text">"Roba esclusiva a prezzi onesti. Il mio shop preferito in assoluto, consiglio a tutti."</p><div class="review-author">⭐ Cliente verificato</div></div>
+    <div class="review-card-full"><div class="review-header"><div class="review-stars">★★★★★</div><div class="review-verified">VERIFICATO</div></div><p class="review-text">"Hoodie arrivata in 2 giorni, qualità eccellente. Il packaging era curato nei dettagli."</p><div class="review-author">⭐ Cliente verificato</div></div>
+  </div>
+  <div class="ig-strip" style="margin-top:28px">
+    <div class="ig-strip-top"><div class="ig-icon">📸</div><div class="ig-text"><h3>LASCIA UNA REVIEW</h3><p>POSTA E TAGGACI SU IG</p></div></div>
+    <a class="ig-link" href="https://www.instagram.com/drip__santa/" target="_blank">@drip__santa →</a>
+  </div>
+  <div class="bottom-spacer"></div>
+</div>
+
+<!-- ══════════════════════════════════════ INFO ══ -->
+<div id="page-info" class="page">
+  <button class="back-btn" onclick="showPage('home')">← Home</button>
+  <div class="page-hero"><div class="page-hero-tag">About</div><h2>CHI SIAMO 🔥</h2><p>La storia di Drip Santa</p></div>
+  <div class="info-section" style="margin-top:24px">
+    <div class="info-block"><h4>DRIP SANTA</h4><p>Il tuo posto per lo streetwear autentico. Scarpe, vestiti, accessori ed elettronica selezionati con cura per chi vuole drippare ogni giorno.</p></div>
+    <div class="info-block"><h4>COME ORDINARE</h4><p>Trova il pezzo che ti piace, poi contattaci su Instagram con un DM. Rispondiamo velocemente e ti guidiamo nell'acquisto passo per passo.</p></div>
+    <div class="info-block"><h4>CONTATTI</h4><p>📸 Instagram: <a href="https://www.instagram.com/drip__santa/" target="_blank">@drip__santa</a><br/>Mandaci un DM per info su prodotti, taglie e disponibilità.</p></div>
+  </div>
+  <div class="bottom-spacer"></div>
+</div>
+
+<!-- BOTTOM NAV -->
+<nav class="bottom-nav">
+  <button class="nav-item active" id="nav-home" onclick="showPage('home')"><span class="nav-icon">🏠</span>Home</button>
+  <button class="nav-item" id="nav-scarpe" onclick="showPage('scarpe')"><span class="nav-icon">👟</span>Scarpe</button>
+  <button class="nav-item" id="nav-vestiti" onclick="showPage('vestiti')"><span class="nav-icon">👕</span>Vestiti</button>
+  <button class="nav-item" id="nav-elettronica" onclick="showPage('elettronica')"><span class="nav-icon">🎧</span>Tech</button>
+  <button class="nav-item" id="nav-recensioni" onclick="showPage('recensioni')"><span class="nav-icon">⭐</span>Review</button>
+</nav>
+
+<script>
+  const pages=['home','scarpe','vestiti','accessori','calcio','borse','elettronica','recensioni','info'];
+  const navIds=['home','scarpe','vestiti','elettronica','recensioni'];
+  function showPage(name){
+    pages.forEach(p=>{const el=document.getElementById('page-'+p);if(el)el.classList.toggle('active',p===name);});
+    navIds.forEach(p=>{const nav=document.getElementById('nav-'+p);if(nav)nav.classList.toggle('active',p===name);});
+    window.scrollTo(0,0);
+  }
+  if('serviceWorker'in navigator){window.addEventListener('load',()=>navigator.serviceWorker.register('sw.js').catch(()=>{}));}
+  let deferredPrompt;
+  window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();deferredPrompt=e;document.getElementById('install-banner').classList.add('show');});
+  document.getElementById('install-btn').addEventListener('click',async()=>{if(!deferredPrompt)return;deferredPrompt.prompt();await deferredPrompt.userChoice;deferredPrompt=null;document.getElementById('install-banner').classList.remove('show');});
+  document.getElementById('dismiss-btn').addEventListener('click',()=>{document.getElementById('install-banner').classList.remove('show');});
+</script>
 </body>
 </html>

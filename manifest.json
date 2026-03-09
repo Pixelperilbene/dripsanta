@@ -1,0 +1,37 @@
+{
+  "name": "Drip Santa",
+  "short_name": "Drip Santa",
+  "description": "Il tuo posto per lo streetwear 🔥",
+  "start_url": "/dripsanta/",
+  "display": "standalone",
+  "background_color": "#0a0a0a",
+  "theme_color": "#FF3D00",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": ["shopping", "lifestyle"],
+  "shortcuts": [
+    {
+      "name": "Scarpe",
+      "url": "/dripsanta/scarpe.html",
+      "description": "Vedi le scarpe"
+    },
+    {
+      "name": "Vestiti",
+      "url": "/dripsanta/vestiti.html",
+      "description": "Vedi i vestiti"
+    }
+  ]
+}
