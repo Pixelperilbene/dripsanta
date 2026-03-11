@@ -1,27 +1,20 @@
 const CACHE_NAME = 'dripsanta-v1';
-const ASSETS = [
+const urlsToCache = [
   '/dripsanta/',
   '/dripsanta/index.html',
-  '/dripsanta/scarpe.html',
-  '/dripsanta/vestiti.html',
-  '/dripsanta/accessori.html',
-  '/dripsanta/calcio.html',
-  '/dripsanta/borse.html',
-  '/dripsanta/elettronica.html',
-  '/dripsanta/recensioni.html',
   '/dripsanta/manifest.json',
-  '/dripsanta/sw.js',
+  '/dripsanta/icons/icon-192.png',
+  '/dripsanta/icons/icon-512.png',
+  '/dripsanta/icons/apple-touch-icon.png'
 ];
 
-// Install: cache all assets
 self.addEventListener('install', event => {
   event.waitUntil(
-    caches.open(CACHE_NAME).then(cache => cache.addAll(ASSETS))
+    caches.open(CACHE_NAME).then(cache => cache.addAll(urlsToCache))
   );
   self.skipWaiting();
 });
 
-// Activate: remove old caches
 self.addEventListener('activate', event => {
   event.waitUntil(
     caches.keys().then(keys =>
@@ -31,7 +24,6 @@ self.addEventListener('activate', event => {
   self.clients.claim();
 });
 
-// Fetch: network-first, fallback to cache
 self.addEventListener('fetch', event => {
   event.respondWith(
     fetch(event.request)
